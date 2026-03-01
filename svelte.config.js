@@ -1,4 +1,3 @@
-
 import { readFileSync } from 'fs';
 
 // Import plugins
@@ -16,22 +15,21 @@ const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
 const appVersion = pkg.version;
 
 /**
- * Determines the appropriate adapter for given deployment context
- * You can manually set the DEPLOY_ENV env var to override auto-detection.
- * Supported values: 'vercel', 'node', 'docker', 'netlify', 'static', 'auto'
- * Or, we will try to auto-detect based on common environment variables
- * Always falls back to 'auto' if can't determine and not set manually
+ * Determines the appropriate adapter for given deployment context.
+ * You can manually set DEPLOY_ENV to override auto-detection.
+ * Supported values: 'vercel', 'node', 'docker', 'coolify', 'netlify', 'static', 'auto'
  * @returns {import('@sveltejs/kit').Adapter}
  */
 function getAdapter() {
 	// Manual override via DEPLOY_ENV environment variable
 	const deployEnv = process.env.DEPLOY_ENV?.toLowerCase();
 	if (deployEnv) {
-		switch (deployEnv.toLowerCase()) {
+		switch (deployEnv) {
 			case 'vercel':
 				return adapterVercel();
 			case 'node':
 			case 'docker':
+			case 'coolify':
 				return adapterNode();
 			case 'netlify':
 				return adapterNetlify();
@@ -50,20 +48,34 @@ function getAdapter() {
 	// Auto-detection based on environment variables
 	const isVercel = !!(process.env.VERCEL || process.env.VERCEL_ENV);
 	const isNetlify = !!(process.env.NETLIFY || process.env.NETLIFY_SITE_ID);
-	const isDocker = !!(process.env.DOCKER_CONTAINER || process.env.KUBERNETES_SERVICE_HOST ||
-		process.env.HOSTNAME?.includes('docker') || process.env.container === 'docker');
-	const isNodeServer = !!(process.env.NODE_ENV === 'production' &&
-		(process.env.PORT || process.env.HOST || process.env.SERVER_HOST) || process.env.GITHUB_ACTIONS);
-	const isStatic = !!(process.env.CI && (process.env.GITHUB_ACTIONS || process.env.GITLAB_CI) &&
-		process.env.BUILD_STATIC === 'true');
+	const isCoolify = !!(
+		process.env.COOLIFY_URL ||
+		process.env.COOLIFY_BRANCH ||
+		process.env.SOURCE_COMMIT ||
+		process.env.PORT
+	);
+	const isDocker = !!(
+		process.env.DOCKER_CONTAINER ||
+		process.env.KUBERNETES_SERVICE_HOST ||
+		process.env.HOSTNAME?.includes('docker') ||
+		process.env.container === 'docker'
+	);
+	const isNodeServer = !!(
+		(process.env.NODE_ENV === 'production' &&
+			(process.env.PORT || process.env.HOST || process.env.SERVER_HOST)) ||
+		process.env.GITHUB_ACTIONS
+	);
+	const isStatic = !!(
+		process.env.CI &&
+		(process.env.GITHUB_ACTIONS || process.env.GITLAB_CI) &&
+		process.env.BUILD_STATIC === 'true'
+	);
 
 	if (isVercel) {
 		return adapterVercel();
 	} else if (isNetlify) {
 		return adapterNetlify();
-	} else if (isDocker) {
-		return adapterNode();
-	} else if (isNodeServer) {
+	} else if (isCoolify || isDocker || isNodeServer) {
 		return adapterNode();
 	} else if (isStatic) {
 		return adapterStatic();
@@ -77,21 +89,21 @@ const config = {
 	kit: {
 		adapter: getAdapter(),
 		paths: {
-			base: process.env.BASE_URL || process.env.BASE_PATH || '',
+			base: process.env.BASE_URL || process.env.BASE_PATH || ''
 		},
 		env: {
-			publicPrefix: 'NTB_',
+			publicPrefix: 'NTB_'
 		},
 		prerender: {
-			entries: ['/', '/sitemap'] ,
+			entries: ['/', '/sitemap'],
 			handleHttpError: 'warn',
 			handleMissingId: 'warn',
-			handleUnseenRoutes: 'warn',
+			handleUnseenRoutes: 'warn'
 		}
 	},
 	vite: {
 		define: {
-			__APP_VERSION__: JSON.stringify(appVersion),
+			__APP_VERSION__: JSON.stringify(appVersion)
 		}
 	}
 };
