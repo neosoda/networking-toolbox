@@ -8,6 +8,19 @@ permissions:
   contents: read
 
 jobs:
+  deploy_artifacts:
+    name: 📦 Deploy Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure Dockerfile exists for Coolify Dockerfile mode
+        run: |
+          if [ ! -f Dockerfile ]; then
+            echo "Missing required Dockerfile at repository root."
+            echo "Coolify Dockerfile mode expects ./Dockerfile and deployment will fail without it."
+            exit 1
+          fi
+
   build:
     name: 🔨 Build
     runs-on: ubuntu-latest
@@ -98,6 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     needs:
+      - deploy_artifacts
       - build
       - lint
       - format
