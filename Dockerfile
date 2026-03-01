@@ -33,9 +33,9 @@ COPY --from=deps    --chown=sveltekit:nodejs /app/node_modules ./node_modules
 USER sveltekit
 EXPOSE 3000
 
-# Optional: add a lightweight health endpoint in your app (e.g., /health)
+# Health check honors overridden PORT (required by some PaaS like Coolify)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:3000/health || exit 1
+  CMD node -e "const http=require('http');const p=process.env.PORT||3000;http.get({host:'127.0.0.1',port:p,path:'/health',timeout:2000},(r)=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1));"
 
 ENTRYPOINT ["/sbin/tini","--"]
 CMD ["node","build"]
