@@ -19,3 +19,12 @@ Use:
 - Start command: `npm run start:coolify`
 
 This forces `adapter-node` and avoids ambiguous auto-adapter selection.
+
+## Nixpacks guardrail committed in repo
+A `nixpacks.toml` is now included to make Nixpacks deterministic:
+
+- force `node` provider
+- build with `npm run build:coolify`
+- start with `npm run start:coolify`
+
+This prevents auto-detection drift (for example selecting Python and generating an empty start command).

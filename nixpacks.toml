@@ -1,0 +1,15 @@
+# Ensure Coolify/Nixpacks deploys this repo as Node (not Python) and has an explicit runtime command.
+# Without a start command, Nixpacks defaults to `/bin/bash -c` with no argument and container crashes.
+providers = ["node"]
+
+[variables]
+NODE_ENV = "production"
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build:coolify"]
+
+[start]
+cmd = "npm run start:coolify"
