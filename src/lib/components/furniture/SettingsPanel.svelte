@@ -10,6 +10,7 @@
   import { siteCustomization } from '$lib/stores/siteCustomization';
   import { primaryColor } from '$lib/stores/primaryColor';
   import { fontScale, fontScaleOptions, type FontScaleLevel } from '$lib/stores/fontScale';
+  import { language, type LanguageCode } from '$lib/stores/language';
   import { storage } from '$lib/utils/localStorage';
   import * as config from '$lib/config/customizable-settings';
   import SegmentedControl from '$lib/components/global/SegmentedControl.svelte';
@@ -25,7 +26,7 @@
   let showMoreA11y = $state(standalone);
   let showMoreThemes = $state(standalone);
   let showCustomColorInput = $state(false);
-  let selectedLanguage = $state('en');
+  let currentLanguage = $state(language);
 
   // Store subscriptions
   let accessibilitySettings = $state(accessibility);
@@ -73,11 +74,9 @@
     '#44aaff',
     '#7777ff',
   ];
-  const LANGUAGES = [
+  const LANGUAGES: Array<{ code: LanguageCode; name: string; available: boolean; flag: string }> = [
     { code: 'en', name: 'English', available: true, flag: '🇺🇸' },
-    { code: 'es', name: 'Español', available: false, flag: '🇪🇸' },
-    { code: 'fr', name: 'Français', available: false, flag: '🇫🇷' },
-    { code: 'de', name: 'Deutsch', available: false, flag: '🇩🇪' },
+    { code: 'fr', name: 'Français', available: true, flag: '🇫🇷' },
   ];
 
   // Derived state
@@ -352,9 +351,9 @@
       {#each LANGUAGES as lang (lang.code)}
         <button
           class="language-option"
-          class:active={selectedLanguage === lang.code}
+          class:active={$currentLanguage === lang.code}
           class:disabled={!lang.available}
-          onclick={() => (selectedLanguage = lang.code)}
+          onclick={() => language.setLanguage(lang.code)}
           disabled={!lang.available}
         >
           {lang.flag}

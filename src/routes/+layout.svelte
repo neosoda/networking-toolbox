@@ -21,6 +21,7 @@
   import { siteCustomization } from '$lib/stores/siteCustomization';
   import { primaryColor } from '$lib/stores/primaryColor';
   import { fontScale } from '$lib/stores/fontScale';
+  import { language } from '$lib/stores/language';
   import { ALL_PAGES } from '$lib/constants/nav';
   import { initializeOfflineSupport } from '$lib/stores/offline';
   import { bookmarks } from '$lib/stores/bookmarks';
@@ -149,6 +150,7 @@
     siteCustomization.init();
     primaryColor.init();
     fontScale.init();
+    language.init();
     initializeOfflineSupport();
 
     // Add global keyboard shortcuts
