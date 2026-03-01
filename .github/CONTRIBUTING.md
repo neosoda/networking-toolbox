@@ -1,23 +1,23 @@
-# Contributing
+# Contribution
 
-Hey! Thanks for wanting to contribute to Networking Toolbox 🎉
+Bonjour ! Merci de vouloir contribuer à Networking Toolbox 🎉
 
-## Getting Started
+## Bien démarrer
 
-Checkout the [README](https://github.com/Lissy93/networking-toolbox?tab=readme-ov-file#developing) for setup instructions, it's all very standard (clone, cd, npm install, npm run dev).
+Consultez le [README](https://github.com/Lissy93/networking-toolbox?tab=readme-ov-file#developing) pour les instructions d'installation. Le flux est standard (clone, `cd`, `npm install`, `npm run dev`).
 
-## Code Style
+## Style de code
 
-The usual, just keep it reasonably clean and consistent. Like normal TypeScript + Svelte stuff.
+Restez simple, propre et cohérent avec le style existant TypeScript + Svelte.
 
-## Before You Submit
+## Avant de soumettre
 
-Don't forget to ensure that all checks pass. If you just run `npm run hold-my-beer` then you should be good to go!
+Avant de proposer une PR, vérifiez que toutes les vérifications passent. En pratique, exécuter `npm run hold-my-beer` couvre l'essentiel.
 
-For all project commands, take a look at the [the readme](https://github.com/Lissy93/networking-toolbox?tab=readme-ov-file#project-commands) or just the [`package.json`](https://github.com/Lissy93/networking-toolbox/blob/main/package.json). 
+Pour la liste complète des commandes, consultez le [README](https://github.com/Lissy93/networking-toolbox?tab=readme-ov-file#project-commands) ou directement [`package.json`](https://github.com/Lissy93/networking-toolbox/blob/main/package.json).
 
-## Code of Conduct
+## Code de conduite
 
-Be respectful and constructive. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details.
+Soyez respectueux et constructif. Voir [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) pour les détails.
 
-If you mention .NET I might block you. Just kidding. Maybe.
+Si vous mentionnez .NET, je pourrais vous bloquer. Je plaisante. Peut-être.

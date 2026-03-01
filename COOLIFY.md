@@ -1,30 +1,30 @@
-# Coolify deployment notes
+# Notes de déploiement Coolify
 
-## Build mode
-Use **Dockerfile mode** in Coolify (recommended).
+## Mode de build
+Utilisez le mode **Dockerfile** dans Coolify (recommandé).
 
-The repository now provides a production multi-stage `Dockerfile` and a runtime health check (`/health`) that respects `PORT`.
+Le dépôt fournit un `Dockerfile` multi-stage de production et un health check runtime (`/health`) qui respecte `PORT`.
 
-## Required runtime variables
-Set these environment variables in Coolify:
+## Variables runtime requises
+Définissez ces variables d'environnement dans Coolify :
 
 - `NODE_ENV=production`
 - `HOST=0.0.0.0`
-- `PORT=3000` (or leave Coolify default if it injects one)
+- `PORT=3000` (ou laissez la valeur par défaut de Coolify s'il l'injecte)
 
-## If using Nixpacks / Node mode instead of Dockerfile
-Use:
+## Si vous utilisez Nixpacks / mode Node au lieu de Dockerfile
+Utilisez :
 
-- Build command: `npm run build:coolify`
-- Start command: `npm run start:coolify`
+- Commande de build : `npm run build:coolify`
+- Commande de démarrage : `npm run start:coolify`
 
-This forces `adapter-node` and avoids ambiguous auto-adapter selection.
+Cela force `adapter-node` et évite une sélection ambiguë de l'adapter automatique.
 
-## Nixpacks guardrail committed in repo
-A `nixpacks.toml` is now included to make Nixpacks deterministic:
+## Garde-fou Nixpacks versionné dans le repo
+Un `nixpacks.toml` est inclus pour rendre Nixpacks déterministe :
 
-- force `node` provider
-- build with `npm run build:coolify`
-- start with `npm run start:coolify`
+- force le provider `node`
+- build avec `npm run build:coolify`
+- start avec `npm run start:coolify`
 
-This prevents auto-detection drift (for example selecting Python and generating an empty start command).
+Cela évite les dérives d'auto-détection (par exemple la sélection de Python et la génération d'une commande de démarrage vide).
