@@ -13,11 +13,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Ensure Dockerfile exists for Coolify Dockerfile mode
+      - name: Ensure Dockerfile deployment artifact is valid for Coolify Dockerfile mode
         run: |
           if [ ! -f Dockerfile ]; then
             echo "Missing required Dockerfile at repository root."
             echo "Coolify Dockerfile mode expects ./Dockerfile and deployment will fail without it."
+            exit 1
+          fi
+
+          if [ ! -s Dockerfile ]; then
+            echo "Dockerfile exists but is empty."
+            echo "Coolify will fail with 'failed to read dockerfile' when the artifact contains an empty file."
+            exit 1
+          fi
+
+          if ! git ls-files --error-unmatch Dockerfile >/dev/null 2>&1; then
+            echo "Dockerfile is not tracked by git."
+            echo "Coolify imports from the git commit, so untracked files are never included in the build artifact."
+            exit 1
+          fi
+
+          if ! git archive --format=tar HEAD | tar -tf - | grep -qx 'Dockerfile'; then
+            echo "Dockerfile is missing from the git archive artifact."
+            echo "Coolify builds from an exported artifact and will fail if Dockerfile is excluded."
             exit 1
           fi
 
